@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blo &amp; LashKind Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Karla:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF9FB;
+    --surface:#FFFFFF;
+    --surface-hover:#FDF0F5;
+    --ink:#3A2230;
+    --ink-muted:#8C6B78;
+    --ink-faint:#BB9AA8;
+    --accent:#D6558B;
+    --accent-soft:#FAE1EC;
+    --accent-purple:#8A5FA8;
+    --accent-purple-soft:#EFE3F6;
+    --gold:#B8860B;
+    --border:#F4DCE6;
+    --border-soft:#FBEBF2;
+    --shadow: 0 1px 2px rgba(58,34,48,0.05), 0 8px 20px -14px rgba(58,34,48,0.16);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#241521;
+      --surface:#2F1C2C;
+      --surface-hover:#3A2436;
+      --ink:#F7E9F1;
+      --ink-muted:#C7A8BC;
+      --ink-faint:#8C6B78;
+      --accent:#F07EAE;
+      --accent-soft:#4A2A3E;
+      --accent-purple:#C9A6E0;
+      --accent-purple-soft:#3E2F4C;
+      --gold:#E0C25E;
+      --border:#4A2E40;
+      --border-soft:#3A2436;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 24px -16px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#241521;
+    --surface:#2F1C2C;
+    --surface-hover:#3A2436;
+    --ink:#F7E9F1;
+    --ink-muted:#C7A8BC;
+    --ink-faint:#8C6B78;
+    --accent:#F07EAE;
+    --accent-soft:#4A2A3E;
+    --accent-purple:#C9A6E0;
+    --accent-purple-soft:#3E2F4C;
+    --gold:#E0C25E;
+    --border:#4A2E40;
+    --border-soft:#3A2436;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 24px -16px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Karla", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .topbar{ height:7px; background:linear-gradient(90deg, var(--accent-purple), var(--accent), var(--gold)); }
+
+  .banner{
+    padding:44px 24px 28px;
+    border-bottom:1px solid var(--border);
+  }
+  .banner-inner{
+    max-width:920px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:12px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--gold);
+    display:inline-block;
+  }
+  h1{
+    font-family:"Oswald", "Arial Narrow", sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    font-size:clamp(40px, 8vw, 84px);
+    line-height:0.95;
+    color:var(--accent);
+    margin:0;
+    text-wrap:balance;
+  }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:36px 24px 80px;
+  }
+
+  .intro{
+    color:var(--ink-muted);
+    font-size:16.5px;
+    max-width:66ch;
+    margin:0 0 28px;
+  }
+
+  .search-wrap{
+    position:relative;
+    max-width:420px;
+    margin:0 0 40px;
+  }
+  .search-icon{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    width:15px;
+    height:15px;
+    color:var(--ink-faint);
+    pointer-events:none;
+  }
+  .search-input{
+    width:100%;
+    font-family:"Karla", sans-serif;
+    font-size:14.5px;
+    color:var(--ink);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:11px 40px;
+  }
+  .search-input::placeholder{ color:var(--ink-faint); }
+  .search-input:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+  .search-clear{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    position:absolute;
+    right:6px;
+    top:50%;
+    transform:translateY(-50%);
+    width:26px;
+    height:26px;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--ink-faint);
+    cursor:pointer;
+  }
+  .search-clear:hover{ background:var(--surface-hover); color:var(--ink-muted); }
+  .search-clear.visible{ display:flex; }
+
+  section + section{ margin-top:34px; }
+  .section-label{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:11.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    padding-bottom:8px;
+    margin-bottom:12px;
+    border-bottom:1px solid var(--border-soft);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px 28px;
+  }
+
+  .item{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    padding:12px 10px;
+    border-radius:10px;
+    text-decoration:none;
+    color:inherit;
+    transition:background 0.15s ease;
+  }
+  .item:hover{ background:var(--surface-hover); }
+  .item:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .item-icon{
+    flex-shrink:0;
+    width:38px;
+    height:38px;
+    border-radius:9px;
+    background:var(--accent-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+  }
+  .item-icon.purple{ background:var(--accent-purple-soft); }
+  .item-body{ min-width:0; padding-top:1px; }
+  .item-title{
+    font-weight:600;
+    font-size:15px;
+    color:var(--ink);
+    margin:0 0 2px;
+  }
+  .item-desc{
+    font-size:13.5px;
+    color:var(--ink-muted);
+    margin:0;
+  }
+
+  .no-results{
+    display:none;
+    padding:32px 0 8px;
+    text-align:center;
+    color:var(--ink-faint);
+    font-size:14px;
+  }
+  .no-results.visible{ display:block; }
+
+  footer{
+    margin-top:52px;
+    padding-top:20px;
+    border-top:1px solid var(--border-soft);
+    font-size:13px;
+    color:var(--ink-faint);
+  }
+  footer strong{ color:var(--ink-muted); font-weight:600; }
+
+  @media (max-width:640px){
+    .grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="banner">
+  <div class="banner-inner">
+    <div class="eyebrow">Team Operations Support Portal</div>
+    <h1>Blo &amp; LashKind Portal</h1>
+  </div>
+</div>
+
+<div class="wrap">
+  <p class="intro">Welcome to the Blo &amp; LashKind Portal. This is our centralized hub for every recruitment form, system, and SOP. Use the search bar to find what you need, or simply scroll — click any item to go straight to its form or system. This portal is for Operations Support only; employees have their own portal and don't have access to these internal forms, for security purposes.</p>
+
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.25"/><path d="m14 14-3-3"/></svg>
+    <input id="search-input" class="search-input" type="text" placeholder="Search links…" autocomplete="off" aria-label="Search links">
+    <button id="search-clear" class="search-clear" type="button" aria-label="Clear search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+    </button>
+  </div>
+
+  <section>
+    <div class="section-label">Systems</div>
+    <div class="grid">
+      <a class="item" href="https://maidenorig-prog.github.io/EOD-System-2026/" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">🌙</span>
+        <span class="item-body">
+          <p class="item-title">EOD System</p>
+          <p class="item-desc">End-of-day reporting and logs.</p>
+        </span>
+      </a>
+      <a class="item" href="https://maidenorig-prog.github.io/Onborading-System/" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">🌱</span>
+        <span class="item-body">
+          <p class="item-title">Onboarding System</p>
+          <p class="item-desc">New hire onboarding workflow.</p>
+        </span>
+      </a>
+      <a class="item" href="https://maidenorig-prog.github.io/Blo-Product-Sales-System/" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">🛍️</span>
+        <span class="item-body">
+          <p class="item-title">Blo Product Sales System Dashboard</p>
+          <p class="item-desc">Track product sales performance.</p>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Trackers</div>
+    <div class="grid">
+      <a class="item" href="https://docs.google.com/spreadsheets/d/1EolpVuzukSQn1yslUUOo7O3ZQFjycb8Y/edit?usp=sharing&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">🗓️</span>
+        <span class="item-body">
+          <p class="item-title">RTO Tracker</p>
+          <p class="item-desc">Tracker for staff RTO requests.</p>
+        </span>
+      </a>
+      <a class="item" href="https://docs.google.com/spreadsheets/d/1yBh2fpTrHaZqKdGC63O549Dv78jXqni4/edit?usp=sharing&ouid=107855034182585704738&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">🧑‍💼</span>
+        <span class="item-body">
+          <p class="item-title">Hiring Tracker</p>
+          <p class="item-desc">Track candidates through the hiring pipeline.</p>
+        </span>
+      </a>
+      <a class="item" href="https://docs.google.com/spreadsheets/d/1SSNFX5JHqQlJOwa6aFiGY3KsAYqCQcNd/edit?usp=sharing&ouid=107855034182585704738&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">🏦</span>
+        <span class="item-body">
+          <p class="item-title">Membership to Chase</p>
+          <p class="item-desc">Membership tracking sheet.</p>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Recruitment</div>
+    <div class="grid">
+      <a class="item" href="https://docs.google.com/spreadsheets/d/1yBh2fpTrHaZqKdGC63O549Dv78jXqni4/edit?usp=sharing&ouid=107855034182585704738&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">📋</span>
+        <span class="item-body">
+          <p class="item-title">Applicants Tracker 2026</p>
+          <p class="item-desc">Track candidates through the 2026 hiring pipeline.</p>
+        </span>
+      </a>
+      <a class="item" href="https://docs.google.com/spreadsheets/d/10SRfb1LdkpFDcZn_ERLaOML7IESblHDebVSq86GgdeA/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">📥</span>
+        <span class="item-body">
+          <p class="item-title">BLO Application Form Responses</p>
+          <p class="item-desc">Response sheet for the BLO Application Form.</p>
+        </span>
+      </a>
+      <a class="item" href="https://docs.google.com/spreadsheets/d/1luHd8vToOj_WY1wWy0XKM04QhcPBUlpxUGwp25Vuc0k/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">📥</span>
+        <span class="item-body">
+          <p class="item-title">LK Application Form Responses</p>
+          <p class="item-desc">Response sheet for the LK Job Application Form.</p>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Interview Forms</div>
+    <div class="grid">
+      <a class="item" href="https://forms.gle/pfiSRZTF3fSQbRsv6" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon purple">✂️</span>
+        <span class="item-body">
+          <p class="item-title">LK Stylist Practical Interview Notes</p>
+          <p class="item-desc">Record notes from an LK stylist practical interview.</p>
+        </span>
+      </a>
+      <a class="item" href="https://forms.gle/kLc4Hn8snyVQvEHc7" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon purple">💇‍♀️</span>
+        <span class="item-body">
+          <p class="item-title">BLO Stylist Practical Interview Notes</p>
+          <p class="item-desc">Record notes from a BLO stylist practical interview.</p>
+        </span>
+      </a>
+      <a class="item" href="https://forms.gle/QcPkjvPn8XmsCkJ86" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon purple">🗒️</span>
+        <span class="item-body">
+          <p class="item-title">Guest Coordinator Interview Notes</p>
+          <p class="item-desc">Record notes from a guest coordinator interview.</p>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Job Application Forms</div>
+    <div class="grid">
+      <a class="item" href="https://forms.gle/x214A3qKjvYUz28t7" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">💇</span>
+        <span class="item-body">
+          <p class="item-title">BLO Application Form</p>
+          <p class="item-desc">Submit a new BLO application.</p>
+        </span>
+      </a>
+      <a class="item" href="https://forms.gle/vRY2gGS4Tz8q2Rhi6" target="_blank" rel="noopener noreferrer">
+        <span class="item-icon">💅</span>
+        <span class="item-body">
+          <p class="item-title">LK Job Application Form</p>
+          <p class="item-desc">Submit a new LK job application.</p>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <p id="no-results" class="no-results">No links match your search.</p>
+
+  <footer>
+    <strong>14 links.</strong> Send more links anytime and this portal gets updated.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var input = document.getElementById('search-input');
+  var clearBtn = document.getElementById('search-clear');
+  var noResults = document.getElementById('no-results');
+  var items = Array.prototype.slice.call(document.querySelectorAll('.item'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section'));
+
+  function filter(){
+    var q = input.value.trim().toLowerCase();
+    clearBtn.classList.toggle('visible', q.length > 0);
+
+    var anyVisible = false;
+    items.forEach(function(item){
+      var match = q === '' || item.textContent.toLowerCase().indexOf(q) !== -1;
+      item.hidden = !match;
+      if(match) anyVisible = true;
+    });
+
+    sections.forEach(function(section){
+      var hasVisible = section.querySelectorAll('.item:not([hidden])').length > 0;
+      section.hidden = q !== '' && !hasVisible;
+    });
+
+    noResults.classList.toggle('visible', q !== '' && !anyVisible);
+  }
+
+  input.addEventListener('input', filter);
+  clearBtn.addEventListener('click', function(){
+    input.value = '';
+    filter();
+    input.focus();
+  });
+})();
+</script>
+</body>
+</html>
